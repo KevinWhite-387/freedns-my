@@ -1,0 +1,69 @@
+name: Invitation request
+description: Ask for a single-use invitation code so you can create an account at freedns.my
+title: "[invite] "
+labels: ["invitation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Registration at **freedns.my** is by invitation only.
+
+        Fill this in and we will review it by hand. If it is approved, a **single-use code** is mailed
+        to the address you give below, and we reply here to tell you to check that mailbox.
+
+        Please keep one request per issue.
+
+  - type: input
+    id: email
+    attributes:
+      label: E-mail address to send the code to
+      description: Exactly one address. It does not have to be a Gmail; any working inbox is fine.
+      placeholder: name@example.com
+    validations:
+      required: true
+
+  - type: input
+    id: handle
+    attributes:
+      label: GitHub handle
+      description: Filled in automatically if you are signed in - just confirm it is right.
+      placeholder: KevinWhite-387
+    validations:
+      required: true
+
+  - type: textarea
+    id: purpose
+    attributes:
+      label: What do you want to use the registry for?
+      description: One or two sentences are enough. Mention the names you have in mind, if you already know them.
+      placeholder: I want a name for a personal blog, plus a couple of records pointing at my server.
+    validations:
+      required: true
+
+  - type: input
+    id: names
+    attributes:
+      label: Names you would like (optional)
+      description: Comma separated, for example alice.pvf.cc, blog.kz.ci
+      placeholder: alice.pvf.cc
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: Privacy and terms
+      description: Both boxes are required - this is what the registry needs before it can create an account.
+      options:
+        - label: I have read and accept the terms of service (https://freedns.my/legal.php).
+          required: true
+        - label: I agree that the e-mail address above may be used to send the invitation code and essential account mail, as described in the privacy notice (https://freedns.my/legal.php?doc=privacy).
+          required: true
+
+  - type: checkboxes
+    id: confirm
+    attributes:
+      label: Confirmation
+      options:
+        - label: I understand that the code works once, and that sharing it publicly will get it withdrawn.
+          required: true
