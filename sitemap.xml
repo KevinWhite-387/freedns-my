@@ -1,0 +1,262 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  freedns.my - the public pages, in every language the site can actually show them in.
+
+  One <url> block per page, listing an alternate for each language that page really exists in, so
+  nothing here points at an address that would 404. English lives in the site root and is also the
+  x-default, because it is the address that always works.
+
+  Static on purpose: crawlers ask for /sitemap.xml exactly, and rewriting that path would mean touching
+  the nginx configuration, which this project avoids. Regenerate when pages are added.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://freedns.my/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/"/>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/request.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/request.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/request.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/request.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/request.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/request.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/request.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/request.php"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/status.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/status.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/status.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/status.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/status.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/status.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/status.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/status.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/manage.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/manage.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/manage.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/manage.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/manage.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/manage.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/manage.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/manage.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/whois.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/whois.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/whois.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/whois.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/whois.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/whois.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/whois.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/whois.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/market.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/market.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/market.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/market.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/market.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/market.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/market.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/market.php"/>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/doc.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/doc.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/doc.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/doc.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/doc.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/doc.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/doc.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/doc.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/legal.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/legal.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/legal.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/legal.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/legal.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/legal.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/legal.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/legal.php"/>
+    <changefreq>yearly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/abuse.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/abuse.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/abuse.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/abuse.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/abuse.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/abuse.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/abuse.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/abuse.php"/>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/changelog.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/changelog.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/changelog.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/changelog.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/changelog.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/changelog.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/changelog.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/changelog.php"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/health.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/health.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/health.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/health.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/health.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/health.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/health.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/health.php"/>
+    <changefreq>daily</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/chat.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/chat.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/chat.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/chat.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/chat.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/chat.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/chat.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/chat.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/sitemap.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/sitemap.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/sitemap.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/sitemap.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/sitemap.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/sitemap.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/sitemap.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/sitemap.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/experimental.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/experimental.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/experimental.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/experimental.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/experimental.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/experimental.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/experimental.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/experimental.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.2</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/advertise.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/advertise.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/advertise.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/advertise.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/advertise.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/advertise.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/advertise.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/advertise.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/jobs.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/jobs.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/jobs.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/jobs.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/jobs.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/jobs.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/jobs.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/jobs.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/about.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/about.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/about.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/about.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/about.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/about.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/about.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/about.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/reviews.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/reviews.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/reviews.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/reviews.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/reviews.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/reviews.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/reviews.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/reviews.php"/>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <url>
+    <loc>https://freedns.my/partners.php</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://freedns.my/partners.php"/>
+    <xhtml:link rel="alternate" hreflang="zh" href="https://freedns.my/zh/partners.php"/>
+    <xhtml:link rel="alternate" hreflang="zh-hant" href="https://freedns.my/zh-hant/partners.php"/>
+    <xhtml:link rel="alternate" hreflang="ja" href="https://freedns.my/ja/partners.php"/>
+    <xhtml:link rel="alternate" hreflang="ko" href="https://freedns.my/ko/partners.php"/>
+    <xhtml:link rel="alternate" hreflang="ms" href="https://freedns.my/ms/partners.php"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://freedns.my/partners.php"/>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>
+

@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Private areas: nothing here is useful to a search engine, and the console needs a signed-in account.
+Disallow: /admin/
+Disallow: /account/
+Disallow: /api.php
+Disallow: /mail-cron.php
+Disallow: /alert-cron.php
+
+# The mail host is not part of the website.
+Disallow: /roundcube/
+Disallow: /webmail/
+
+Sitemap: https://freedns.my/sitemap.xml
