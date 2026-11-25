@@ -1,0 +1,749 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * freedns.my - plain text HTML rendering.
+ *
+ * Every user visible string of the public pages comes from the language files through t();
+ * the back office uses the same helpers with the English catalogue.
+ */
+
+function is_admin_area(): bool
+{
+    $script = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+
+    return str_contains($script, '/admin/');
+}
+
+function nav_public(): array
+{
+    return fd_nav_filter([
+        url('index.php')   => t('nav.home'),
+        url('request.php') => t('nav.request'),
+        url('status.php')  => t('nav.status'),
+        url('manage.php')  => t('nav.manage'),
+        url('blog/')       => (function_exists('lang') && is_zh() ? '博客' : 'Blog'),
+        url('domains.php') => t('nav.domains'),
+        url('whois.php')   => t('nav.whois'),
+        url('market.php')  => t('nav.market'),
+        url('chat.php')    => t('nav.chat'),
+        url('sitemap.php') => (function_exists('lang') && is_zh() ? '站点地图' : 'Site map'),
+        // The rest of the long list: what the registry asked for in the "old" navigation.
+        url('changelog.php') => (function_exists('lang') && is_zh() ? '更新日志' : 'Changelog'),
+        url('legal.php')     => (function_exists('lang') && is_zh() ? '服务条款' : 'Terms'),
+        url('legal.php?doc=privacy') => (function_exists('lang') && is_zh() ? '隐私说明' : 'Privacy'),
+        url('abuse.php')     => (function_exists('lang') && is_zh() ? '举报滥用' : 'Report abuse'),
+        url('doc.php')       => (function_exists('lang') && is_zh() ? '政策与文档' : 'Policy and docs'),
+        url('jobs.php')      => (function_exists('lang') && is_zh() ? '加入我们' : 'Work with us'),
+        url('about.php')     => (function_exists('lang') && is_zh() ? '关于我们' : 'About us'),
+        url('partners.php')  => (function_exists('lang') && is_zh() ? '其它平台' : 'Other registries'),
+        url('changelog.php') => t('nav.changelog'),
+        url('legal.php?doc=terms')   => t('legal.terms'),
+        url('legal.php?doc=privacy') => t('legal.privacy'),
+        url('abuse.php')   => t('abuse.heading_short'),
+        url('doc.php')     => t('nav.doc'),
+    ]);
+}
+
+function nav_admin(): array
+{
+    // A reviewer only ever sees what it may use; everything else is hidden and answers 403.
+    if (!is_owner()) {
+        return [
+            'index.php'   => 'Dashboard',
+            'domains.php' => 'Domains',
+            'changes.php' => 'Changes',
+        ];
+    }
+
+    return [
+        'index.php'    => 'Dashboard',
+        'domains.php'  => 'Domains',
+        'users.php'    => 'Users',
+        'servers.php'  => 'Cloud servers',
+        'holds.php'    => 'Holding page',
+        'vault.php'    => 'Mail vault',
+        'forward-requests.php' => 'Mail forwarding',
+        'cron-key.php' => 'Cron key',
+        'maintenance.php' => 'Maintenance',
+        'api-maintenance.php' => 'API maintenance',
+        'openplatform.php' => 'Open platform',
+        'ui-browser.php' => 'Interface and browsers',
+        'dns-providers.php' => 'DNS providers (Spaceship, ANYNS)',
+        'vcci.php' => 'vc.ci sign-in',
+        'developers.php' => 'Developer requests',
+        '/blog/admin/index.php'    => 'Blog posts',
+        '/blog/admin/comments.php' => 'Blog comments',
+        '/blog/admin/authors.php'  => 'Blog authors',
+        '/blog/admin/message.php'  => 'Blog messages',
+        'ads.php'      => 'Advertising',
+        'finance.php'  => 'About us and the money',
+        'partners.php' => 'Other registries',
+        'legacy-mail.php' => 'Legacy mail migration',
+        'tickets.php'  => 'Tickets',
+        'market.php'   => 'Market',
+        'shop.php'     => 'Shop',
+        'chat.php'     => 'Chat',
+        'health.php'   => 'Health',
+        'abuse.php'    => 'Abuse',
+        'bulk.php'     => 'Bulk records',
+        'verify.php'   => 'Published records',
+        'nameservers.php' => 'Name servers',
+        'changes.php'  => 'Changes',
+        'zones.php'    => 'Zones',
+        'reserved.php' => 'Reserved',
+        'dns.php'      => 'DNS',
+        'limits.php'   => 'Rate limits',
+        'settings.php' => 'Settings',
+        'mail.php'     => 'Mail',
+        'admins.php'   => 'Administrators',
+        'logs.php'     => 'Audit log',
+        'export.php'   => 'Export',
+    ];
+}
+
+/** "Language: English · 中文" with the language in use shown as plain text. */
+function language_switcher(): string
+{
+    $current = lang();
+
+    /*
+     * The line reads "English - 简体中文 - 其它語言": the two complete languages stay in it, the language in use is
+     * shown in bold, and every other language lives behind one link to language.php, which lists them with how
+     * far each translation has got. lang_switcher_html() (all six in one line) is kept for anything that still
+     * wants the long form.
+     */
+    $others = function_exists('lang_line_html') ? lang_line_html()
+        : (function_exists('lang_switcher_html') ? lang_switcher_html() : '');
+
+    return '<span class="small">' . h(t('nav.lang_title')) . ': ' . $others . '</span>';
+}
+
+/**
+ * The short navigation: home, the site map, and then the console and sign-out which render_nav() appends.
+ * This is what a visitor sees by default - four links instead of eighteen.
+ */
+function nav_public_min(): array
+{
+    return fd_nav_filter([
+        url('index.php')   => t('nav.home'),
+        url('blog/')       => (function_exists('lang') && is_zh() ? '博客' : 'Blog'),
+        url('sitemap.php') => (function_exists('lang') && is_zh() ? '站点地图' : 'Site map'),
+        // Advertisers are not holders yet: they need a way in from the short menu as well.
+        url('jobs.php')    => (function_exists('lang') && is_zh() ? '加入我们' : 'Work with us'),
+        url('about.php')   => (function_exists('lang') && is_zh() ? '关于我们' : 'About us'),
+        url('partners.php') => (function_exists('lang') && is_zh() ? '其它平台' : 'Other registries'),
+    ]);
+}
+
+/**
+ * Which navigation to show.
+ *
+ *   * a visitor who is not signed in always gets the short one - it is the default the registry asked for;
+ *   * a signed-in holder may switch, and the choice is kept for the session.
+ *
+ * Nothing is written to the session for a visitor, so an ordinary page view still sets no cookie.
+ */
+function nav_style(): string
+{
+    $user = current_user();
+    if ($user === null) {
+        return 'new';
+    }
+
+    $wanted = strtolower(trim((string)($_GET['nav'] ?? '')));
+    if (in_array($wanted, ['new', 'old'], true)) {
+        $_SESSION['fd_nav_style'] = $wanted;
+
+        return $wanted;
+    }
+
+    $kept = strtolower((string)($_SESSION['fd_nav_style'] ?? ''));
+
+    return in_array($kept, ['new', 'old'], true) ? $kept : 'new';
+}
+
+function render_nav(): string
+{
+    $links = [];
+
+    if (!empty($GLOBALS['FD_ADMIN_GATE_PROMPT'])) {        // Before the hidden entry is opened, not even the menu of the back office is shown.
+        return '';
+    }
+
+    if (is_admin_area()) {
+        foreach (nav_admin() as $href => $label) {
+            /* Withdrawn features are filtered here, so every menu loses them at once. */
+            if (function_exists('retired_url') && retired_url((string)$href)) { continue; }
+            /* absolute hrefs, so the same menu works from /admin/ and from /blog/admin/ */
+            $navHref = str_starts_with($href, '/') ? $href : url('admin/' . $href);
+            $links[] = '<a href="' . h($navHref) . '">' . h($label) . '</a>';
+        }
+        $links[] = '<a href="' . h(url('index.php')) . '">Public site</a>';
+        if (is_admin()) {
+            $links[] = '<a href="' . h('logout.php?t=' . urlencode(logout_token())) . '">Sign out</a>';
+        }
+    } else {
+        $navStyle = nav_style();
+        $items    = $navStyle === 'old' ? nav_public() : nav_public_min();
+        foreach ($items as $href => $label) {
+            $links[] = '<a href="' . h($href) . '">' . h($label) . '</a>';
+        }
+
+        // The user console. The back office has no link on purpose: it is opened by typing its
+        // secret address (Settings -> Admin entry) and answers 404 otherwise.
+        $user = current_user();
+        if ($user === null) {
+            $links[] = '<a href="' . h(url('account/login.php')) . '">' . h(t('nav.signin')) . '</a>';
+            $links[] = '<a href="' . h(url('account/register.php')) . '">' . h(t('nav.register')) . '</a>';
+        } else {
+            $links[] = '<a href="' . h(url('account/index.php')) . '">'
+                . h(t('nav.console', (string)$user['username'])) . '</a>';
+
+            // Signed in only: the switch between the short navigation and the full list of pages.
+            $zhHome  = function_exists('lang') && is_zh();
+            $links[] = $navStyle === 'old'
+                ? '<a href="?nav=new">' . h($zhHome ? '新版导航' : 'New menu') . '</a>'
+                : '<a href="?nav=old">' . h($zhHome ? '旧版导航' : 'Full menu') . '</a>';
+
+            $links[] = '<a href="' . h(url('account/logout.php')) . '">' . h(t('nav.signout')) . '</a>';
+        }
+    }
+
+    return implode(' &middot; ', $links);
+}
+
+/* ------------------------------------------------------------------ *
+ * Colour theme                                                        *
+ *                                                                     *
+ * The public pages can be shown dark. The visitor chooses with a plain *
+ * link (no JavaScript): ?theme=dark stores the choice in a cookie and  *
+ * redirects back to the same page. Without a choice the system setting *
+ * decides, through the CSS media query. The back office always stays   *
+ * light, exactly as before.                                            *
+ * ------------------------------------------------------------------ */
+
+const FD_THEME_COOKIE = 'fdtheme';
+const FD_THEME_YEAR   = 31536000;
+
+/** 'dark', 'light' or 'auto' (the visitor has not chosen yet). */
+function theme(): string
+{
+    $value = strtolower(trim((string)($_COOKIE[FD_THEME_COOKIE] ?? '')));
+
+    return in_array($value, ['dark', 'light'], true) ? $value : 'auto';
+}
+
+/** Current address with the theme parameter replaced. */
+function theme_switch_url(string $value): string
+{
+    $query = is_array($_GET) ? $_GET : [];
+    unset($query['theme']);
+    if ($value !== 'auto') {
+        $query['theme'] = $value;
+    }
+
+    $path = (string)($_SERVER['SCRIPT_NAME'] ?? '/index.php');
+    $path = str_replace(["\r", "\n", "\0", '\\'], '', $path);
+
+    return $query === [] ? $path : $path . '?' . http_build_query($query);
+}
+
+/** "Theme: Light · Dark · System" with the current choice shown as plain text. */
+function theme_switcher(): string
+{
+    $current = theme();
+    $parts   = [];
+
+    foreach (['light', 'dark', 'auto'] as $value) {
+        $label = h(t('nav.theme_' . $value));
+        $parts[] = $value === $current
+            ? '<strong>' . $label . '</strong>'
+            : '<a href="' . h(theme_switch_url($value)) . '">' . $label . '</a>';
+    }
+
+    return '<span class="small">' . h(t('nav.theme_title')) . ': ' . implode(' &middot; ', $parts) . '</span>';
+}
+
+/**
+ * Handles ?theme=dark|light|auto: stores the choice and returns to the same page without the
+ * parameter. Called from the bootstrap, before any output.
+ */
+function fd_apply_theme_switch(): void
+{
+    if (is_admin_area()) {
+        // The back office has no theme switch and always stays light.
+        return;
+    }
+    if (!isset($_GET['theme'])) {
+        return;
+    }
+
+    $value = strtolower(trim((string)$_GET['theme']));
+    if (!in_array($value, ['dark', 'light', 'auto'], true)) {
+        return;
+    }
+
+    $options = [
+        'expires'  => $value === 'auto' ? time() - 3600 : time() + FD_THEME_YEAR,
+        'path'     => '/',
+        'httponly' => true,
+        'secure'   => request_is_https(),
+        'samesite' => 'Lax',
+    ];
+    setcookie(FD_THEME_COOKIE, $value === 'auto' ? '' : $value, $options);
+
+    // Back to the same address, with the parameter removed and the rest of the query kept.
+    $path  = (string)($_SERVER['REQUEST_URI'] ?? '/');
+    $parts = parse_url($path);
+    $query = [];
+    if (isset($parts['query'])) {
+        parse_str((string)$parts['query'], $query);
+        unset($query['theme']);
+    }
+    $target = (string)($parts['path'] ?? '/');
+    if ($query !== []) {
+        $target .= '?' . http_build_query($query);
+    }
+
+    header('Location: ' . safe_relative_url($target, '/'), true, 303);
+    exit;
+}
+
+function page_css(): string
+{
+    // One source of truth for both palettes; dark is the same list with other values.
+    $light = [
+        'bg' => '#ffffff', 'fg' => '#111111', 'link' => '#0000EE', 'visited' => '#551A8B',
+        'active' => '#EE0000', 'muted' => '#444444', 'hint' => '#555555', 'border' => '#bbbbbb',
+        'softline' => '#eeeeee', 'panel' => '#fafafa', 'code' => '#f2f2f2', 'field' => '#ffffff',
+        'fieldborder' => '#999999', 'button' => '#f2f2f2', 'buttonhover' => '#e4e4e4',
+        'error' => '#990000', 'ok' => '#006600', 'infoline' => '#666666', 'scheme' => 'light',
+    ];
+    $dark = [
+        'bg' => '#111111', 'fg' => '#e8e8e8', 'link' => '#7ab7ff', 'visited' => '#c9a0ff',
+        'active' => '#ff8a8a', 'muted' => '#b0b0b0', 'hint' => '#a0a0a0', 'border' => '#444444',
+        'softline' => '#2a2a2a', 'panel' => '#1a1a1a', 'code' => '#1f1f1f', 'field' => '#1a1a1a',
+        'fieldborder' => '#555555', 'button' => '#2a2a2a', 'buttonhover' => '#333333',
+        'error' => '#ff8080', 'ok' => '#6fdc6f', 'infoline' => '#9a9a9a', 'scheme' => 'dark',
+    ];
+
+    $variables = static function (array $set): string {
+        $out = '';
+        foreach ($set as $name => $value) {
+            $out .= $name === 'scheme'
+                ? '  color-scheme: ' . $value . ";\n"
+                : '  --' . $name . ': ' . $value . ";\n";
+        }
+
+        return $out;
+    };
+
+    $theme = ":root {\n" . $variables($light) . "}\n"
+        . ".theme-dark {\n" . $variables($dark) . "}\n"
+        // No choice yet: follow the system setting.
+        . "@media (prefers-color-scheme: dark) {\n  .theme-auto {\n"
+        . preg_replace('/^/m', '  ', rtrim($variables($dark))) . "\n  }\n}\n";
+
+    return $theme . <<<CSS
+body { font-family: ui-monospace, "DejaVu Sans Mono", Menlo, Consolas, "Courier New", monospace;
+       font-size: 15px; line-height: 1.55; color: var(--fg); background: var(--bg); margin: 0; padding: 0; }
+.wrap { max-width: 54em; margin: 0 auto; padding: 1.5em 1em 3em 1em; }
+/* Links keep the classic browser colours, like nic.eu.org: blue, purple once visited. */
+a:link { color: var(--link); text-decoration: underline; }
+a:visited { color: var(--visited); text-decoration: underline; }
+a:hover { color: var(--link); text-decoration: underline; }
+a:active { color: var(--active); }
+h1 { font-size: 1.35em; margin: 0 0 .2em 0; letter-spacing: .02em; }
+h2 { font-size: 1em; margin: 1.6em 0 .5em 0; text-transform: uppercase; letter-spacing: .08em; }
+h3 { font-size: 1em; margin: 1.2em 0 .3em 0; }
+p.sub { margin: 0 0 .5em 0; color: var(--muted); }
+hr { border: 0; border-top: 1px solid var(--border); margin: 1em 0; }
+p { margin: .5em 0; }
+ul, ol { margin: .5em 0 .5em 1.4em; padding: 0; }
+li { margin: .15em 0; }
+table { border-collapse: collapse; width: 100%; margin: .6em 0; }
+th, td { text-align: left; vertical-align: top; padding: .25em .8em .25em 0; }
+th { border-bottom: 1px solid var(--border); font-weight: normal; text-transform: uppercase; font-size: .85em; letter-spacing: .05em; }
+td { border-bottom: 1px solid var(--softline); }
+input[type=text], input[type=password], input[type=email], input[type=number], select, textarea {
+       font-family: inherit; font-size: inherit; color: var(--fg); background: var(--field);
+       border: 1px solid var(--fieldborder); padding: .3em .4em; max-width: 100%; box-sizing: border-box; }
+input[type=text], input[type=password], input[type=email], input[type=number] { width: 100%; max-width: 32em; }
+textarea { width: 100%; }
+input[type=submit], button { font-family: inherit; font-size: inherit; padding: .35em .9em;
+       border: 1px solid var(--fieldborder); background: var(--button); color: var(--fg); cursor: pointer; }
+input[type=submit]:hover, button:hover { background: var(--buttonhover); }
+label { display: block; margin: .9em 0 .15em 0; }
+label.inline { display: inline; margin: 0; }
+.hint { color: var(--hint); font-size: .85em; }
+.msg { border: 1px solid var(--fieldborder); border-left-width: 4px; padding: .5em .8em; margin: 1em 0; }
+.msg.error { border-color: var(--error); }
+.msg.info { border-color: var(--infoline); }
+.msg.ok { border-color: var(--ok); }
+.err { color: var(--error); }
+.ok { color: var(--ok); }
+.small { font-size: .88em; color: var(--muted); }
+.mono-box { border: 1px solid var(--fieldborder); padding: .6em .8em; margin: 1em 0; background: var(--panel); }
+pre.wrap { white-space: pre-wrap; word-wrap: break-word; margin: .6em 0; font-family: inherit; }
+code { background: var(--code); padding: 0 .2em; }
+.code-block { border: 1px solid var(--border); background: var(--panel); padding: .6em .8em; overflow-x: auto; }
+.field-error { color: var(--error); font-size: .88em; }
+td.actions { white-space: nowrap; }
+form.inline { display: inline; }
+.pill { border: 1px solid var(--fieldborder); padding: 0 .35em; font-size: .85em; }
+CSS;
+}
+
+/**
+ * The tab icon of every page: whatever the operator uploaded to the site root, or a built-in
+ * text icon so browsers stop asking for a missing /favicon.ico.
+ *
+ * Every address carries the modification time of the file, so replacing an icon takes effect at
+ * once: browsers (and a CDN in front of the site) cache a favicon for a very long time, and a
+ * changed address is the only reliable way to make them fetch the new one.
+ */
+function favicon_links(): string
+{
+    $base  = app_base_url();
+    $links = [];
+
+    foreach ([
+        'favicon.svg'          => 'image/svg+xml',
+        'favicon.ico'          => null,
+        'favicon-192.png'      => 'image/png',
+        'apple-touch-icon.png' => 'image/png',
+    ] as $file => $type) {
+        $path = FD_ROOT . '/' . $file;
+        if (!is_file($path)) {
+            continue;
+        }
+
+        $stamp  = @filemtime($path);
+        $suffix = $stamp === false ? '' : '?v=' . (int)$stamp;
+
+        if ($file === 'apple-touch-icon.png') {
+            $links[] = '<link rel="apple-touch-icon" href="' . h($base . '/' . $file . $suffix) . '">';
+        } else {
+            $links[] = '<link rel="icon" href="' . h($base . '/' . $file . $suffix) . '"'
+                . ($type === null ? ' sizes="any"' : ' type="' . $type . '"') . '>';
+        }
+    }
+
+    if ($links === []) {
+        $svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">'
+            . '<rect width="32" height="32" fill="#ffffff"/>'
+            . '<text x="16" y="24" text-anchor="middle" font-family="monospace" font-size="21"'
+            . ' font-weight="bold" fill="#0000EE">fd</text></svg>';
+        $links[] = '<link rel="icon" href="data:image/svg+xml,' . rawurlencode($svg) . '">';
+    }
+
+    return implode("\n", $links);
+}
+
+function page_header(string $title): void
+{
+    // Resolved before the first byte of output: the navigation asks whether somebody is signed in
+    // to the console, and starting a session after output would not work.
+    $nav = render_nav();
+
+    if (!headers_sent()) {
+        header('Content-Type: text/html; charset=utf-8');
+        header('X-Content-Type-Options: nosniff');
+        header('Referrer-Policy: same-origin');
+    }
+
+    $siteTitle = setting_lang('site_title');
+    if ($siteTitle === '') {
+        $siteTitle = 'freedns.my';
+    }
+    $subtitle = setting_lang('site_subtitle');
+
+    echo "<!DOCTYPE html>\n<html lang=\"" . h(lang()) . '"'
+        . (is_admin_area() ? '' : ' class="theme-' . h(theme()) . '"') . ">\n<head>\n";
+    echo "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n";
+echo "<meta charset=\"utf-8\">\n";
+    echo "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n";
+    echo favicon_links() . "\n";
+    echo '<meta name="robots" content="' . (is_admin_area() ? 'noindex,nofollow' : 'index,follow') . "\">\n";
+
+    /*
+     * A description for search engines. The back office and other private areas get none - they are noindex
+     * anyway. For a public page it is built as "<page title> - <site description>", so interior pages do not
+     * all carry exactly the same sentence; the site description itself is a setting, so it can be reworded
+     * without touching code, and it follows the language of the page.
+     */
+    if (!is_admin_area()) {
+        $fdDesc = trim((string)setting_lang('meta_description'));
+        if ($fdDesc === '') {
+            $fdDesc = function_exists('lang') && is_zh()
+                ? 'freedns.my 免费二级域名注册局：免费申请域名、免费 DNS 解析，并提供自建邮件服务，注册即可使用。'
+                : 'freedns.my is a free second level domain registry: free names, free DNS hosting and a mail '
+                  . 'service of its own, ready as soon as you register.';
+        }
+        $fdTitle = trim((string)$title);
+        if ($fdTitle !== '') {
+            $fdDesc = $fdTitle . ' — ' . $fdDesc;
+        }
+        $fdDesc = function_exists('mb_substr') ? mb_substr($fdDesc, 0, 300) : substr($fdDesc, 0, 300);
+        echo '<meta name="description" content="' . h($fdDesc) . "\">\n";
+
+        /*
+         * hreflang: tell a search engine that the same page exists in the other languages, so it shows the right
+         * one to the right reader instead of treating them as duplicates. A language is only listed when it can
+         * actually be shown (English lives in the root, the others in a directory), and x-default points at
+         * English - the address that always works.
+         */
+        if (function_exists('fd_languages') && function_exists('lang')) {
+            $fdRoot  = defined('FD_ROOT') ? FD_ROOT : dirname(__DIR__);
+            $fdPath  = '/' . ltrim((string)parse_url((string)($_SERVER['REQUEST_URI'] ?? '/'), PHP_URL_PATH), '/');
+            foreach (array_keys(fd_languages()) as $fdCode) {
+                if ($fdCode !== 'en' && str_starts_with($fdPath, '/' . $fdCode . '/')) {
+                    $fdPath = substr($fdPath, strlen($fdCode) + 1);
+                    break;
+                }
+            }
+            $fdBase = function_exists('app_base_url') ? rtrim(app_base_url(), '/') : '';
+            foreach (fd_languages() as $fdCode => $fdNames) {
+                if ($fdCode !== 'en' && !is_dir($fdRoot . '/' . $fdCode)) {
+                    continue;
+                }
+                echo '<link rel="alternate" hreflang="' . h($fdCode) . '" href="'
+                    . h($fdBase . ($fdCode === 'en' ? '' : '/' . $fdCode) . $fdPath) . "\">\n";
+            }
+            echo '<link rel="alternate" hreflang="x-default" href="' . h($fdBase . $fdPath) . "\">\n";
+        }
+    }
+    echo '<title>' . h($title) . ' &mdash; ' . h($siteTitle) . "</title>\n";
+
+    /*
+     * Two things only the old engines care about, printed before the stylesheets:
+     *
+     *   X-UA-Compatible   stops Internet Explorer from falling back to "compatibility view" (IE7 mode). The
+     *                     Chinese dual-core browsers - 360, QQ, Sogou - default to that mode, and without this
+     *                     line they render the site as if it were 2006, whatever the stylesheet says.
+     *
+     *   the conditional block below is read by IE 8 and older only. It pulls in assets/legacy-ie.css, which
+     *   carries the fixes those engines need (no @media, no child selectors, inline-block behaving differently)
+     *   and the operator's decision that they get no advertising rails at all - elsewhere the rails are hidden
+     *   with a media query, and a media query is exactly what these browsers do not understand.
+     */
+    echo '<meta http-equiv="X-UA-Compatible" content="IE=edge">' . "\n";
+    echo '<!--[if lte IE 8]><link rel="stylesheet" href="'
+        . h(url('assets/legacy-ie.css')) . '"><![endif]-->' . "\n";
+
+    echo "<style>\n" . page_css() . "</style>\n";
+    // The modern interface, when a signed-in holder switched to it: its stylesheet, and the class the
+    // stylesheet hangs off. Visitors never reach either of them.
+    echo theme_head();
+    echo theme_marker();
+    $fdUi2 = function_exists('theme_is_modern2') && theme_is_modern2();
+    echo "</head>\n<body class=\"" . h(theme_body_class()) . "\">\n<div class=\"wrap\">\n";
+    if (function_exists('ui2_topbar') && function_exists('theme_is_modern2') && theme_is_modern2()) {
+        echo ui2_topbar($siteTitle, $nav);
+    }
+
+    /* The 2.0 console needs two columns: the menu rail on the left, the page on the right.
+     * The shell div opened here is closed again at the very end of page_footer(). */
+    if ($fdUi2 && function_exists('ui2_console_shell') && ui2_console_shell()) {
+        $GLOBALS['FD_UI2_SHELL'] = true;
+        echo '<div class="ui2-shell">' . ui2_console_rail();
+    }
+
+    /*
+     * The notice about an old browser goes at the very top of the page, above the header, so it is the first
+     * thing seen. It is plain HTML: no JavaScript, no image, nothing IE6 cannot parse. Empty for everybody else.
+     */
+    if (function_exists('fd_browser_notice')) {
+        echo fd_browser_notice();
+    }
+    if (function_exists('flash_notice_html')) {
+        echo flash_notice_html();
+    }
+
+    /*
+     * The header and the page body are buffered from here, so that the inline advertisement can be placed inside
+     * the content instead of after it, and so that the rails printed just below are visible to that decision:
+     * one advertisement per page means the inline one stays quiet when the rails already carry one.
+     * page_footer() takes the buffer back. A page that never reaches page_footer() still shows - PHP flushes the
+     * buffer when the request ends.
+     */
+    $GLOBALS['FD_BODY_BUFFER'] = true;
+    ob_start();
+
+    // The two advertising rails: wide screens only, and never in the back office.
+    // IE 8 and older get none at all: the rails are normally hidden by a media query, which those browsers cannot
+    // read, so on the operator's decision the text column keeps the full width down there instead.
+    if (function_exists('ad_rails') && !is_admin_area()
+        && !(function_exists('fd_ie_no_media') && fd_ie_no_media())) {
+        echo ad_rails();
+    }
+
+    if (theme_is_modern()) {
+        // Always visible in the new look, and always one click back - no confirmations on the way out.
+        // The wording is deliberately blunt: development on this interface has stopped.
+        echo '<p class="theme-flag">'
+            . h(function_exists('lang') && is_zh()
+                ? '新版界面 1.0（实验）· 已停止进一步开发（2.0 正在开发中）· 可能存在风险，请谨慎使用 · 出现问题请及时上报'
+                : 'New interface 1.0 (experimental) · no further development (2.0 is being built) · may be risky, use with care · please report problems')
+            . h(function_exists('lang') && is_zh() ? '一键回到旧版' : 'back to the classic look')
+            . h(function_exists('lang') && is_zh() ? '说明' : 'what this means') . "</a></p>\n";
+    }
+
+    /*
+     * One <h1> per page, and it says what the page is about. On the home page that is the site name; on every
+     * other page the page title becomes the h1 and the site name moves to the line underneath (the same
+     * "sub" line the templates already use, so nothing about the look changes).
+     */
+    $fdScriptName = basename((string)($_SERVER['SCRIPT_NAME'] ?? 'index.php'));
+    $fdIsHome     = $fdScriptName === 'index.php' || trim((string)$title) === '';
+    if ($fdIsHome) {
+        echo '<h1><a href="' . h(url('index.php')) . '">' . h($siteTitle) . "</a></h1>\n";
+    } else {
+        echo '<h1>' . h($title) . "</h1>\n";
+        echo '<p class="sub"><a href="' . h(url('index.php')) . '">' . h($siteTitle) . "</a></p>\n";
+    }
+
+    /*
+     * A language that is still being translated says so, in its own words. Better a reader knows why half the
+     * page is in English than to wonder whether the site is broken. The line disappears by itself once the
+     * catalogue of that language is complete (see lang_incomplete()).
+     */
+    if (function_exists('lang_incomplete') && lang_incomplete()) {
+    if (function_exists('ui2_banner') && function_exists('theme_is_modern2') && theme_is_modern2()) {
+        echo ui2_banner();
+    /* The 2.0 home page opens with its own hero block; the plain <h1> below stays the page heading. */
+    if ($fdUi2 && function_exists('ui2_hero')
+        && (basename((string)($_SERVER['SCRIPT_NAME'] ?? '')) === 'index.php')) {
+        echo ui2_hero();
+    }
+    }
+        $fdNotice = [
+            'zh'      => '本页面的部分内容尚未翻译，未翻译处显示英文。我们正在补全，欢迎帮忙。',
+            'zh-hant' => '本頁面的部分內容尚未翻譯，未翻譯處顯示英文。我們正在補全，歡迎幫忙。',
+            'ja'      => 'このページには未翻訳の部分があり、その部分は英語で表示されます。順次翻訳を進めています。',
+            'ko'      => '이 페이지의 일부는 아직 번역되지 않아 영어로 표시됩니다. 번역을 진행 중입니다.',
+            'ms'      => 'Sebahagian halaman ini belum diterjemah dan dipaparkan dalam bahasa Inggeris. '
+                       . 'Terjemahan sedang diusahakan.',
+        ][lang()] ?? '';
+        if ($fdNotice !== '') {
+            echo '<div class="msg info">' . h($fdNotice) . "</div>\n";
+        }
+    }
+
+    // A notice while maintenance mode is on: visitors should know what is closed before they run into it, not
+    // only at the moment a page refuses them. Administrators see it as well - it is how they notice it is on.
+    // The API page says so while the API is taken down, so a holder does not mistake downtime for a broken key.
+    $fdScript = str_replace('\\', '/', (string)($_SERVER['SCRIPT_NAME'] ?? ''));
+    if (function_exists('api_maint_on') && api_maint_on() && str_contains($fdScript, '/account/api.php')) {
+        echo '<div class="msg info"><strong>'
+            . h(is_zh() ? '接口维护中' : 'The API is down for maintenance')
+            . '</strong><br>' . nl2br(h(api_maint_note()))
+            . (api_maint_until() !== ''
+                ? '<br><span class="small">' . h((is_zh() ? '预计恢复：' : 'Expected back: ') . api_maint_until()) . '</span>'
+                : '')
+            . "</div>\n";
+    }
+
+    if (function_exists('maintenance_active') && maintenance_active()) {
+        echo '<p class="msg error">'
+            . h(function_exists('lang') && is_zh() ? '维护中：' : 'Maintenance: ')
+            . nl2br(h(function_exists('maintenance_note') ? maintenance_note() : ''))
+            . "</p>\n";
+    }
+    if ($subtitle !== '') {
+        echo '<p class="sub">' . h($subtitle) . "</p>\n";
+    }
+    echo "<hr>\n<p class=\"nav\">" . $nav . "</p>\n";
+
+    if (!is_admin_area()) {
+        echo '<p class="nav">' . language_switcher() . ' &middot; ' . theme_switcher() . "</p>\n";
+    }
+    echo "<hr>\n";
+
+    if (is_admin_area()) {
+        $admin = current_admin();
+        if ($admin !== null) {
+            echo '<p class="small">Signed in as <strong>' . h((string)$admin['username']) . '</strong>'
+                . ' &middot; last sign-in ' . h(format_date((string)($admin['last_login_at'] ?? ''))) . "</p>\n";
+        }
+    }
+
+    echo '<h2>' . h($title) . "</h2>\n";
+
+    foreach (take_flashes() as $flash) {
+        $type = in_array($flash['type'], ['info', 'ok', 'error'], true) ? $flash['type'] : 'info';
+        echo '<div class="msg ' . $type . '">' . h((string)$flash['message']) . "</div>\n";
+    }
+}
+
+function page_footer(): void
+{
+    $contact   = trim((string)setting('contact_email', ''));
+    $siteTitle = setting_lang('site_title');
+    if ($siteTitle === '') {
+        $siteTitle = 'freedns.my';
+    }
+
+    /*
+     * The inline advertisement: the page's own HTML comes back out of the buffer and gets the advertisement put
+     * into it, at the spot that belongs to this page (see ad_inline_inject()). This runs before the slot below so
+     * that the ordering on the page is body, then that slot, then the footer.
+     */
+    if (!empty($GLOBALS['FD_BODY_BUFFER'])) {
+        $fdBody = (string)ob_get_clean();
+        $GLOBALS['FD_BODY_BUFFER'] = false;
+        echo function_exists('ad_inline_inject') ? ad_inline_inject($fdBody) : $fdBody;
+    }
+
+    /*
+     * The advertisement under the application form. It is printed from here rather than from request.php so the
+     * page itself does not have to be touched: this runs on every page, and only the application page gets it.
+     * An empty slot shows the hiring notice instead, so the space never looks broken.
+     */
+    if (function_exists('ad_request_bottom')
+        && basename((string)($_SERVER['SCRIPT_NAME'] ?? '')) === 'request.php'
+        && !is_admin_area()) {
+        echo ad_request_bottom();
+    }
+
+    echo "<hr>\n<p class=\"small\">";
+    echo t('footer.tagline', h($siteTitle));
+    if (function_exists('ui2_feedback') && function_exists('theme_is_modern2') && theme_is_modern2()) {
+        echo ui2_feedback($contact);
+    }
+    if ($contact !== '') {
+        echo ' ' . t('footer.contact') . ' <a href="mailto:' . h($contact) . '">' . h($contact) . '</a>.';
+    }
+    echo ' ' . t('footer.generated', h(date('Y-m-d H:i')), h(date_default_timezone_get()));
+    echo "</p>\n";
+
+    if (!is_admin_area()) {
+        // A second switch at the bottom, so a long page does not have to be scrolled back up.
+        echo '<p class="nav">' . theme_switcher() . "</p>\n";
+    }
+
+if (!empty($GLOBALS['FD_UI2_SHELL'])) {
+    echo "</div>`n";          // the shell that holds the console menu and the page
+}
+    echo "</div>\n</body>\n</html>\n";
+}
+
+/** Renders administrator-editable plain text without interpreting any markup. */
+function text_block(string $text): string
+{
+    return '<pre class="wrap">' . h($text) . '</pre>';
+}
+
+function error_list(array $errors): string
+{
+    if ($errors === []) {
+        return '';
+    }
+    $html = '<div class="msg error"><strong>' . h(t('error.list_title')) . '</strong><ul>';
+    foreach ($errors as $error) {
+        $html .= '<li>' . h((string)$error) . '</li>';
+    }
+
+    return $html . '</ul></div>';
+}
