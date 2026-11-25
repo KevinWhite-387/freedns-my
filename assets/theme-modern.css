@@ -1,0 +1,431 @@
+/*
+ * freedns.my - the "modern" interface: the dense look of a classic control panel (dns.he.net style).
+ *
+ * It is loaded ONLY when a signed-in holder has switched, and only ever on top of the existing markup, so
+ * nothing here may assume extra classes exist. Everything is scoped to body.theme-modern.
+ *
+ * The look, in short: no rounded corners, no shadows, no big fonts, no whitespace games - thin grey rules,
+ * compact tables, blue underlined links, and a header strip. Reading speed over decoration.
+ */
+
+body.theme-modern {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #000000;
+    font: 13px/1.45 Verdana, Geneva, "DejaVu Sans", Arial, sans-serif;
+}
+
+/* ------------------------------------------------------------------ header strip */
+body.theme-modern header,
+body.theme-modern .site-header {
+    background: #003366;
+    color: #ffffff;
+    padding: 6px 10px;
+    border-bottom: 3px solid #6699cc;
+}
+
+body.theme-modern header a,
+body.theme-modern .site-header a {
+    color: #cce0ff;
+    text-decoration: none;
+}
+
+/* ------------------------------------------------------------------ navigation */
+body.theme-modern nav,
+body.theme-modern .site-nav {
+    background: #e8eef5;
+    border-bottom: 1px solid #99a8bb;
+    padding: 4px 10px;
+    font-size: 12px;
+}
+
+body.theme-modern nav a,
+body.theme-modern .site-nav a {
+    color: #003366;
+    text-decoration: none;
+    padding: 0 2px;
+}
+
+body.theme-modern nav a:hover,
+body.theme-modern .site-nav a:hover {
+    text-decoration: underline;
+    background: #d5e2f0;
+}
+
+/* ------------------------------------------------------------------ layout */
+body.theme-modern main,
+body.theme-modern .wrap,
+body.theme-modern .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 10px 12px 30px 12px;
+}
+
+body.theme-modern h1 {
+    font-size: 18px;
+    margin: 10px 0 8px 0;
+    padding-bottom: 3px;
+    border-bottom: 2px solid #003366;
+    color: #003366;
+}
+
+body.theme-modern h2 {
+    font-size: 15px;
+    margin: 16px 0 6px 0;
+    padding: 3px 6px;
+    background: #e8eef5;
+    border: 1px solid #b9c6d6;
+    color: #003366;
+}
+
+body.theme-modern h3 {
+    font-size: 13px;
+    margin: 12px 0 4px 0;
+    color: #003366;
+}
+
+body.theme-modern p,
+body.theme-modern li {
+    margin: 6px 0;
+}
+
+/* ------------------------------------------------------------------ links */
+body.theme-modern a {
+    color: #0000cc;
+    text-decoration: underline;
+}
+
+body.theme-modern a:visited {
+    color: #551a8b;
+}
+
+body.theme-modern a:hover {
+    color: #cc0000;
+}
+
+/* ------------------------------------------------------------------ tables */
+body.theme-modern table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 14px 0;
+    font-size: 12px;
+}
+
+body.theme-modern th {
+    background: #d5e2f0;
+    border: 1px solid #99a8bb;
+    padding: 3px 6px;
+    text-align: left;
+    font-weight: bold;
+    color: #003366;
+    white-space: nowrap;
+}
+
+body.theme-modern td {
+    border: 1px solid #c8d3e0;
+    padding: 3px 6px;
+    vertical-align: top;
+}
+
+body.theme-modern tr:nth-child(even) td {
+    background: #f7f9fc;
+}
+
+/* ------------------------------------------------------------------ forms */
+body.theme-modern form {
+    margin: 8px 0;
+}
+
+body.theme-modern label {
+    display: block;
+    margin: 8px 0 2px 0;
+    font-weight: bold;
+    color: #003366;
+    font-size: 12px;
+}
+
+body.theme-modern label.inline {
+    display: inline;
+    margin: 0 6px 0 2px;
+    font-weight: normal;
+    color: #000000;
+}
+
+body.theme-modern input[type="text"],
+body.theme-modern input[type="password"],
+body.theme-modern input[type="email"],
+body.theme-modern input[type="number"],
+body.theme-modern select,
+body.theme-modern textarea {
+    border: 1px solid #7f9db9;
+    background: #ffffff;
+    color: #000000;
+    padding: 2px 3px;
+    font: 12px/1.4 Verdana, Arial, sans-serif;
+    border-radius: 0;
+}
+
+body.theme-modern input[type="submit"],
+body.theme-modern button {
+    border: 1px solid #003366;
+    background: #d5e2f0;
+    color: #003366;
+    padding: 2px 10px;
+    font: bold 12px/1.5 Verdana, Arial, sans-serif;
+    border-radius: 0;
+    cursor: pointer;
+}
+
+body.theme-modern input[type="submit"]:hover,
+body.theme-modern button:hover {
+    background: #b9cfe8;
+}
+
+body.theme-modern code,
+body.theme-modern pre,
+body.theme-modern .mono {
+    font-family: "Courier New", Courier, monospace;
+    font-size: 12px;
+    background: #f4f4f4;
+    border: 1px solid #dddddd;
+    padding: 1px 3px;
+}
+
+body.theme-modern pre {
+    padding: 8px;
+    overflow: auto;
+}
+
+/* ------------------------------------------------------------------ message bars */
+body.theme-modern .msg {
+    border: 1px solid #99a8bb;
+    border-left: 5px solid #003366;
+    background: #f2f6fb;
+    padding: 6px 8px;
+    margin: 10px 0;
+    border-radius: 0;
+}
+
+body.theme-modern .msg.error,
+body.theme-modern .msg.err {
+    border-left-color: #cc0000;
+    background: #fdf1f1;
+}
+
+body.theme-modern .msg.ok {
+    border-left-color: #007700;
+    background: #f1fbf1;
+}
+
+body.theme-modern .hint,
+body.theme-modern .small {
+    font-size: 11px;
+    color: #555555;
+}
+
+body.theme-modern .err {
+    color: #cc0000;
+    font-weight: bold;
+}
+
+/* ------------------------------------------------------------------ footer */
+body.theme-modern footer,
+body.theme-modern .site-footer {
+    border-top: 1px solid #99a8bb;
+    margin-top: 20px;
+    padding: 8px 10px;
+    font-size: 11px;
+    color: #555555;
+    background: #f7f9fc;
+}
+
+/* ------------------------------------------------------------------ a small banner while the new look is on */
+body.theme-modern .theme-flag {
+    background: #ffffcc;
+    border-bottom: 1px solid #cccc66;
+    padding: 3px 10px;
+    font-size: 11px;
+    color: #663300;
+}
+
+/* ------------------------------------------------------------------ left rail instead of a top nav
+ *
+ * The markup is left exactly as it is (no PHP change): the navigation is the paragraph that follows the
+ * <hr> near the top of the page. It is lifted out of the flow and pinned to the left, and everything else
+ * in .wrap is indented by the width of the rail - which is how a control panel looks, without touching a
+ * single template. The old interface never loads this file, so it keeps its top navigation.
+ */
+body.theme-modern .wrap {
+    padding-left: 208px;
+    max-width: none;
+}
+
+body.theme-modern .wrap > h1,
+body.theme-modern .wrap > p.sub,
+body.theme-modern .wrap > hr {
+    margin-left: 0;
+}
+
+body.theme-modern .wrap > hr {
+    display: none;              /* the rail separates itself */
+}
+
+body.theme-modern .wrap > p.nav {
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 196px;
+    margin: 0;
+    padding: 10px 6px 20px 8px;
+    overflow-y: auto;
+    background: #eef3f9;
+    border-right: 1px solid #99a8bb;
+    font-size: 12px;
+    line-height: 1.9;
+}
+
+body.theme-modern .wrap > p.nav a {
+    display: block;
+    padding: 2px 6px;
+    color: #003366;
+    text-decoration: none;
+    border-bottom: 1px solid #dde5ee;
+}
+
+body.theme-modern .wrap > p.nav a:hover {
+    background: #d5e2f0;
+    color: #cc0000;
+    text-decoration: none;
+}
+
+/* The second ".nav" paragraph (language and colour theme) becomes the bottom of the rail. */
+body.theme-modern .wrap > p.nav ~ p.nav {
+    position: static;
+    width: auto;
+    border: 0;
+    border-top: 1px solid #c8d3e0;
+    margin-top: 10px;
+    padding-top: 6px;
+    background: transparent;
+    font-size: 11px;
+    color: #555555;
+}
+
+/* Room for the rail on a narrow screen: it becomes an ordinary block again. */
+@media (max-width: 900px) {
+    body.theme-modern .wrap {
+        padding-left: 0;
+    }
+    body.theme-modern .wrap > p.nav {
+        position: static;
+        width: auto;
+        margin: 6px 0;
+        padding: 6px;
+        border: 1px solid #b9c6d6;
+        background: #eef3f9;
+    }
+}
+
+/* ------------------------------------------------------------------ dense editing tables
+ *
+ * The record editors are ordinary forms laid out in a table. Nothing about their markup is changed here:
+ * the cells are simply packed tighter, the fields fill their cell, and the buttons sit next to each other
+ * instead of stacking - which is what makes a control panel feel like one. The classic interface does not
+ * load this file, so it keeps its roomier layout.
+ */
+body.theme-modern table td input[type="text"],
+body.theme-modern table td input[type="number"],
+body.theme-modern table td input[type="email"],
+body.theme-modern table td select {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px;
+    padding: 1px 3px;
+}
+
+body.theme-modern table td {
+    padding: 2px 4px;
+}
+
+body.theme-modern table th {
+    padding: 2px 5px;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+}
+
+/* Action cells: buttons in a row, never wrapped onto a second line. */
+body.theme-modern td.actions,
+body.theme-modern .actions {
+    white-space: nowrap;
+    text-align: right;
+}
+
+body.theme-modern td.actions form,
+body.theme-modern .actions form,
+body.theme-modern form.inline {
+    display: inline;
+    margin: 0 0 0 2px;
+}
+
+body.theme-modern td.actions input[type="submit"],
+body.theme-modern .actions input[type="submit"] {
+    padding: 1px 7px;
+    font-size: 11px;
+}
+
+/* A field that is only a few characters wide (TTL, priority, index) stays small. */
+body.theme-modern input[size="2"],
+body.theme-modern input[size="3"],
+body.theme-modern input[size="4"],
+body.theme-modern input[size="5"],
+body.theme-modern input[size="6"],
+body.theme-modern input[size="7"],
+body.theme-modern input[size="8"] {
+    width: auto;
+    min-width: 3.5em;
+}
+
+/* Comments and free text in a table cell: small and without the extra chrome. */
+body.theme-modern table td textarea {
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 12px;
+    min-height: 3.2em;
+}
+
+body.theme-modern table td label {
+    display: inline;
+    margin: 0 4px 0 0;
+    font-weight: normal;
+    color: #000000;
+}
+
+body.theme-modern table td .hint {
+    display: block;
+    margin-top: 1px;
+}
+
+/* The "add a row" row at the bottom of an editor: keep it light so it reads as a tool, not as content. */
+body.theme-modern table tr:last-child td {
+    background: #fbfcfe;
+}
+
+/* Long values (TXT, keys) must wrap inside the cell instead of stretching the table. */
+body.theme-modern table td code,
+body.theme-modern table td .mono {
+    word-break: break-all;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+@media print {
+    body.theme-modern nav,
+    body.theme-modern .theme-flag {
+        display: none;
+    }
+}

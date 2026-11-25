@@ -1,0 +1,325 @@
+@charset "utf-8";
+/* ============================================================================
+ * freedns.my - patches for Internet Explorer 8 and older.
+ *
+ * Loaded ONLY by IE 8 and below, through a conditional comment in inc/views.php:
+ *
+ *     <!--[if lte IE 8]><link rel="stylesheet" href=".../assets/legacy-ie.css"><![endif]-->
+ *
+ * IE 9 and up, and every other browser, never download this file - and IE 6 does not understand the
+ * conditional comment either, which is exactly why it is a comment and not a media query.
+ *
+ * What is in here, and why each line exists:
+ *
+ *   @media          IE 8 and older do not support media queries AT ALL. The advertising rails are hidden with
+ *                   one everywhere else, so down here they would either always show (squeezing the text into a
+ *                   narrow column) or never show, decided by nothing. On the operator's decision: no rails.
+ *   child selectors IE 6 does not understand ">" or "+" at all, and would drop the whole rule that contains one.
+ *   [attr]          IE 6 ignores attribute selectors, so rules keyed on them have to be repeated with classes.
+ *   inline-block    IE 6 and 7 only apply it to elements that were inline to begin with; a "zoom:1" and the
+ *                   star hack make block elements behave.
+ *   min-height      Ignored by IE 6; "height" plus "overflow" is the old workaround where it matters.
+ *   max-width       Ignored by IE 6 as well, so the wrapper is sized by width and the content is left-aligned
+ *                   with the text-align centring trick.
+ *   :hover          IE 6 only honours it on links, so nothing here depends on hover for information.
+ *   PNG alpha       Not an issue: this interface carries no images beyond the favicon.
+ *
+ * Everything is deliberately conservative: nothing here changes colour, spacing or wording, it only stops the
+ * layout from breaking. If a rule is not needed, it is not here.
+ * ========================================================================== */
+
+/* --- centring without max-width (IE 6 needs the text-align trick) ------------------------------- */
+body {
+    text-align: center;
+}
+
+.wrap {
+    text-align: left;
+    width: 96%;
+    margin: 0 auto;
+    zoom: 1;
+}
+
+/* --- no advertising rails down here: see the header comment ------------------------------------ */
+.ad-rails,
+.ad-rail,
+.ad-box,
+.ad-inline,
+.ad {
+    display: none !important;
+}
+
+/* --- tables: IE adds no border-collapse of its own, and cellpadding is unreliable --------------- */
+table {
+    border-collapse: collapse;
+}
+
+td,
+th {
+    padding: 3px 6px;
+    text-align: left;
+    vertical-align: top;
+}
+
+/* --- forms: IE 6 renders inputs at an unpredictable size --------------------------------------- */
+input,
+select,
+textarea {
+    font-size: 100%;
+    font-family: inherit;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea {
+    padding: 2px 3px;
+}
+
+/* IE 6 ignores the attribute selectors above: repeat the essentials on the element itself. */
+input,
+textarea {
+    padding: 2px 3px;
+}
+
+/* --- monospace content must wrap instead of forcing the page sideways -------------------------- */
+code,
+pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+/* --- rules and boxes --------------------------------------------------------------------------- */
+hr {
+    height: 1px;
+    border: 0;
+    background: #999;
+    color: #999;
+}
+
+.msg {
+    padding: 6px 8px;
+    border: 1px solid #999;
+    zoom: 1;
+}
+
+.hint,
+.small {
+    font-size: 92%;
+}
+
+/* --- navigation: inline-block needs help on block elements in IE 6 and 7 ----------------------- */
+.nav a,
+.nav span {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+}
+
+/* --- the old-browser notice itself, so it cannot break in the browser it is meant for ---------- */
+.fd-browser-warn {
+    text-align: left;
+    zoom: 1;
+}
+
+/* --- long words (a domain name, a URL) must not stretch the table ------------------------------ */
+td,
+th,
+p,
+li {
+    word-wrap: break-word;
+}
+
+/* --- the language switcher is a row of links: never let it collapse into one blob ------------- */
+.language-switch a,
+.theme-switch a {
+    display: inline-block;
+    zoom: 1;
+    *display: inline;
+    margin-right: 6px;
+}
+
+/* ============================================================================
+ * literal colour fallback
+ *
+ * The stylesheet in inc/views.php declares its palette as CSS custom properties
+ * (:root { --bg: #ffffff; … }) and uses them with var(--bg). IE 9 and older do not
+ * understand custom properties at all, so every one of those declarations is dropped
+ * and the page would come out with no colours and no borders.
+ *
+ * The rules below repeat the same palette with literal values, for the same elements
+ * the classic interface actually uses. They are plain colours, nothing newer than CSS1,
+ * so IE 5.5 and up apply them.
+ * ========================================================================== */
+
+body {
+    background: #ffffff;
+    color: #111111;
+}
+
+a:link    { color: #0000EE; }
+a:visited { color: #551A8B; }
+a:hover   { color: #0000EE; }
+a:active  { color: #EE0000; }
+
+h1, h2, h3, strong, b { color: #111111; }
+
+p.sub, .small, .sub { color: #444444; }
+.hint               { color: #555555; }
+.err, .error        { color: #990000; }
+.ok                 { color: #006600; }
+
+hr {
+    background: #bbbbbb;
+    color: #bbbbbb;
+}
+
+table {
+    border-color: #bbbbbb;
+}
+
+th {
+    border-bottom: 1px solid #bbbbbb;
+}
+
+td {
+    border-bottom: 1px solid #eeeeee;
+}
+
+.msg {
+    border: 1px solid #999999;
+    border-left-width: 4px;
+    background: #ffffff;
+    color: #111111;
+}
+
+.msg.error { border-color: #990000; }
+.msg.info  { border-color: #666666; }
+.msg.ok    { border-color: #006600; }
+
+.mono-box,
+.panel {
+    border: 1px solid #999999;
+    background: #fafafa;
+    color: #111111;
+}
+
+code,
+pre {
+    background: #f2f2f2;
+    color: #111111;
+}
+
+.pill {
+    border: 1px solid #999999;
+    color: #111111;
+}
+
+input,
+select,
+textarea,
+button {
+    background: #ffffff;
+    color: #111111;
+    border: 1px solid #999999;
+}
+
+input[type="submit"],
+button {
+    background: #f2f2f2;
+    color: #111111;
+}
+
+/* The rails and boxes are hidden above; these keep whatever is left readable. */
+.ad-tag,
+.ad-note {
+    color: #555555;
+}
+
+.ad {
+    background: #fafafa;
+    border: 1px solid #999999;
+    color: #111111;
+}
+/* ============================================================================
+ * CJK text must be allowed to break anywhere
+ *
+ * English words carry spaces to break at, Chinese and Japanese do not. IE 6 lays a
+ * table out automatically, so one long unbroken run of CJK in a cell makes that column
+ * claim the whole width and pushes the next column to the far right. word-break: break-all
+ * is an IE 5.5 extension and is exactly the tool for this; the other browsers in the
+ * compatibility list ignore it or honour it without harm.
+ * ========================================================================== */
+
+td,
+th,
+p,
+li,
+dd,
+blockquote {
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+/* A table never wider than the page, and columns that share the space evenly. */
+table {
+    width: 100%;
+}
+
+/* The suffix table has four short columns; keep the last one from being pushed away. */
+table th,
+table td {
+    width: auto;
+}
+
+/* Headings with a badge after them must not push the badge onto its own line forever. */
+h1, h2, h3 {
+    word-break: break-all;
+}
+/* ============================================================================
+ * Chinese, Japanese and Korean text needs its own fonts in IE 6
+ *
+ * The stylesheet asks for "ui-monospace, DejaVu Sans Mono, Menlo, Consolas, Courier New".
+ * None of those carries CJK glyphs, so IE 6 falls back to the browser's own font for the
+ * page language - SimSun for Chinese - which changes the width of every character and makes
+ * a page that looks right in English look unfamiliar in Chinese.
+ *
+ * The stack below keeps Courier New (and therefore the fixed-width look) for Latin text and
+ * names a CJK font per language behind it. Every family here ships with Windows since XP,
+ * so IE 6 and every later browser pick one up.
+ * ========================================================================== */
+
+body,
+td,
+th,
+p,
+li,
+dd,
+blockquote,
+input,
+select,
+textarea,
+button,
+code,
+pre {
+    font-family: "Courier New", Courier, "SimSun", "宋体", "MS Gothic", "Malgun Gothic", monospace;
+}
+
+/* Chinese line boxes need a little more room than Latin ones; 1.55 clips descenders in IE 6. */
+body {
+    line-height: 1.65;
+}
+
+/* Headings are the same face, only bigger: IE 6 would otherwise apply its own heading font. */
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Courier New", Courier, "SimSun", "宋体", "MS Gothic", "Malgun Gothic", monospace;
+}
+
+/* The registry status table is two columns; keep the label column narrow whatever the language. */
+table th:first-child,
+table td:first-child {
+    white-space: nowrap;
+}
