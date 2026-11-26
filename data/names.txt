@@ -1,0 +1,3 @@
+// freedns.my - names in this registry
+// format: name,owner-address
+//
