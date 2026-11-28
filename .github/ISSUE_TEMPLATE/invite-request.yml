@@ -8,16 +8,17 @@ body:
       value: |
         Registration at **freedns.my** is by invitation only.
 
-        Fill this in and we will review it by hand. If it is approved, a **single-use code** is mailed
-        to the address you give below, and we reply here to tell you to check that mailbox.
+        This form is for the **account** only. Names are requested separately, with a pull request against
+        `data/names.txt` - see https://freedns.my/names.php
 
-        Please keep one request per issue.
+        Fill this in and we will review it by hand. If it is approved, a **single-use code** is mailed to
+        the address you give below, and we reply here to tell you to check that mailbox.
 
   - type: input
     id: email
     attributes:
       label: E-mail address to send the code to
-      description: Exactly one address. It does not have to be a Gmail; any working inbox is fine.
+      description: Exactly one address. Use the same address later for the console account.
       placeholder: name@example.com
     validations:
       required: true
@@ -35,19 +36,10 @@ body:
     id: purpose
     attributes:
       label: What do you want to use the registry for?
-      description: One or two sentences are enough. Mention the names you have in mind, if you already know them.
-      placeholder: I want a name for a personal blog, plus a couple of records pointing at my server.
+      description: One or two sentences. This is part of the review, so it cannot be left empty.
+      placeholder: A personal blog, plus a couple of records pointing at my server.
     validations:
       required: true
-
-  - type: input
-    id: names
-    attributes:
-      label: Names you would like (optional)
-      description: Comma separated, for example alice.pvf.cc, blog.kz.ci
-      placeholder: alice.pvf.cc
-    validations:
-      required: false
 
   - type: checkboxes
     id: consent
